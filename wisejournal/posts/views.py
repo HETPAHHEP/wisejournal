@@ -5,6 +5,13 @@ from django.http import HttpResponse
 from .models import Post
 
 
+def my_index(request):
+    return render(
+        request,
+        'index.html'
+    )
+
+
 def index(request):
     latest = Post.objects.order_by('-pub_date')[:10]
     output = []
@@ -12,4 +19,3 @@ def index(request):
     for item in latest:
         output.append(item.text)
     return HttpResponse('\n'.join(output))
-
