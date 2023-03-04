@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="ru">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <title>Послѣдніе обновленія | WiseJournal</title>
+    </head>
+    <body>
+        <h1>Послѣдніе обновленія на сайтѣ</h1>
+        {% for post in posts %}
+        <h3>
+                Авторъ: {{ post.author.get_full_name }}, дата публикаціи: {{ post.pub_date|date:"d M Y" }}
+        </h3>
+        <p>{{ post.text|linebreaksbr }}</p>
+        <hr>
+        {% endfor %}
+    </body>
+</html>
