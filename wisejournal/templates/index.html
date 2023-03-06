@@ -1,11 +1,11 @@
 {% extends 'base.html' %}
-{% block title %}Послѣдніе обновленія на сайтѣ{% endblock %}
-{% block header %}Послѣдніе обновленія на сайтѣ{% endblock %}
+{% block title %}Последние обновления на сайте{% endblock %}
+{% block header %}Последние обновления на сайте{% endblock %}
 {% block content %}
 
     {% for post in posts %}
         <h3>
-                Авторъ: {{ post.author.get_full_name }}, дата публикаціи: {{ post.pub_date|date:"d M Y" }}
+                Автор: {{ post.author.get_full_name }}, дата публикации: {{ post.pub_date|date:"d M Y" }}
         </h3>
         <p>{{ post.text|linebreaksbr }}</p>
         <hr>
