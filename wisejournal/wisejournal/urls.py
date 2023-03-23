@@ -17,6 +17,19 @@ from django.contrib import admin
 from django.urls import include, path
 
 urlpatterns = [
+    # главная страница с постами
     path("", include("posts.urls")),
+
+    # регистрация и авторизация
+    path("auth/", include("users.urls")),
+
+    # если не нашлось нужного шаблона для /auth в файле users.urls --
+    # ищем совпадения в файле django.contrib.auth.urls
+    path("auth/", include("django.contrib.auth.urls")),
+
+    # админка
     path('admin/', admin.site.urls),
+
+    # debug
+    path('__debug__/', include('debug_toolbar.urls'))
 ]

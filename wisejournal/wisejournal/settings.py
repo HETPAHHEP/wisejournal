@@ -38,6 +38,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    # FOR DJANGO DEBUG TOOLBAR
+    "debug_toolbar"
+]
+
+# FOR DJANGO DEBUG TOOLBAR
+INTERNAL_IPS = [
+    "127.0.0.1"
 ]
 
 MIDDLEWARE = [
@@ -48,15 +56,21 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    # FOR DJANGO DEBUG TOOLBAR
+    "debug_toolbar.middleware.DebugToolbarMiddleware"
 ]
 
 ROOT_URLCONF = 'wisejournal.urls'
 
+# PATH TO TEMPLATES
 TEMPLATES_DIR = BASE_DIR / 'templates'
+USERS_TEMPLATES_DIR = BASE_DIR / 'users' / 'templates'
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [TEMPLATES_DIR],
+        'DIRS': [TEMPLATES_DIR, USERS_TEMPLATES_DIR],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
