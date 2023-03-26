@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     # FOR DJANGO DEBUG TOOLBAR
     "debug_toolbar",
 
-    # APPS
+    # OWN APPS
     'posts',
     'users'
 ]
@@ -67,11 +67,13 @@ MIDDLEWARE = [
 ROOT_URLCONF = 'wisejournal.urls'
 
 TEMPLATES_DIR = BASE_DIR / 'templates'
+# For redefinition of standard templates django.contrib.admin
+REG_TEMPLATES_DIR = BASE_DIR / 'users' / 'templates'
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [TEMPLATES_DIR],
+        'DIRS': [TEMPLATES_DIR, REG_TEMPLATES_DIR],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -144,3 +146,14 @@ STATIC_ROOT = BASE_DIR / 'static'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Login
+
+LOGIN_URL = "/auth/login/"
+LOGIN_REDIRECT_URL = "index"
+# LOGOUT_REDIRECT_URL = "index"
+
+# FILE-BASED EMAIL FOR DEBUG
+EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
+# Directory for storing messages in debug
+EMAIL_FILE_PATH = BASE_DIR / 'sent_emails'
