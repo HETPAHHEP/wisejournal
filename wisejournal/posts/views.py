@@ -18,14 +18,11 @@ def group_posts(request, slug):
 
 @login_required
 def new_post(request):
-    """Добавление новой записи, если автор известен"""
-    if request.method == "POST":
-        form = PostForm(request.POST)
-        if form.is_valid():
-            post = form.save(commit=False)
-            post.author = request.user
-            post.save()
-            return redirect('/')
-    else:
-        form = PostForm()
-    return render(request, 'new_post.html', {'form': form, 'errors': form.errors})
+    form = PostForm(request.POST or None)
+    if not form.is_valid():
+        return render(request, 'new_post.html', {'form': form, 'errors': form.errors})
+
+    post = form.save(commit=False)
+    post.author = request.user
+    post.save()
+    return redirect('/')
