@@ -1,26 +1,21 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 {% load user_filters %}
-{% block title %}Зарегистрироваться{% endblock %}
+{% block title %}Новая запись{% endblock %}
 {% block content %}
 
 <div class="row justify-content-center">
     <div class="col-md-8 p-5">
         <div class="card">
-            <div class="card-header">Зарегистрироваться</div>
+            <div class="card-header">Опубликовать запись</div>
             <div class="card-body">
 
-                {% if form.errors %}
-                <div class="alert alert-danger" role="alert">
-                    {% for field, errors in form.errors.items %}
-                    {% for error in errors %}
-                    {{ error }}
+                    {% for error in form.errors %}
+                        <div class="alert alert-danger" role="alert">
+                            {{ error }}
+                        </div>
                     {% endfor %}
-                    {% endfor %}
-                </div>
-                {% endif %}
 
-
-                <form method="post" action="{% url 'signup' %}">
+                <form method="post" action="{% url 'new_post' %}">
                     {% csrf_token %}
 
                     {% for field in form %}
@@ -39,7 +34,7 @@
 
                     <div class="col-md-6 offset-md-4">
                             <button type="submit" class="btn btn-primary">
-                                Зарегистрироваться
+                                Опубликовать запись
                             </button>
                     </div>
                 </form>
@@ -47,5 +42,6 @@
         </div> <!-- card -->
     </div> <!-- col -->
 </div> <!-- row -->
+
 
 {% endblock %}
