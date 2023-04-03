@@ -48,7 +48,9 @@ INSTALLED_APPS = [
 
     # OWN APPS
     'posts',
-    'users'
+    'users',
+    'django.contrib.sites',
+    'django.contrib.flatpages',
 ]
 
 # FOR DJANGO DEBUG TOOLBAR
@@ -162,3 +164,6 @@ LOGIN_REDIRECT_URL = "index"
 EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
 # Directory for storing messages in debug
 EMAIL_FILE_PATH = BASE_DIR / 'sent_emails'
+
+# ID of the current site
+SITE_ID = 4
