@@ -46,7 +46,7 @@ INSTALLED_APPS = [
     # FOR DJANGO DEBUG TOOLBAR
     "debug_toolbar",
 
-    # OWN APPS
+    # PROJECT'S APPS
     'posts',
     'users',
     'django.contrib.sites',
@@ -134,7 +134,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'ru'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Moscow'
 
 USE_I18N = True
 
