@@ -1,10 +1,10 @@
-from django.test import TestCase
+from unittest import TestCase
+
+from django.test import Client
 
 
-class TestStringMethods(TestCase):
-    def test_length(self):
-        self.assertEqual(len('wisejournal'), 11)
-
-    def test_show_msg(self):
-        # действительно ли первый аргумент — True?
-        self.assertTrue(False, msg="Важная проверка на истинность")
+class TestIndexPage(TestCase):
+    def test_index_available(self):
+        client = Client()
+        response = client.get('/')
+        self.assertEqual(response.status_code, 200)
