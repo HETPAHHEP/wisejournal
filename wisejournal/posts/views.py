@@ -87,22 +87,23 @@ def new_post(request):
 def post_edit(request, username, post_id):
     """Редактировать нужный пост"""
     post = get_object_or_404(Post, pk=post_id)
-    form = PostForm(request.POST or None, instance=post)
-    if not form.is_valid():
-        edit_mode = True
-        return render(
-            request,
-            'new_post.html',
-            {
-                'form': form,
-                'errors': form.errors,
-                'edit_mode': edit_mode,
-                'username': username,
-                'post_id': post_id
-            }
-        )
+    if post.author == request.user:
+        form = PostForm(request.POST or None, instance=post)
+        if not form.is_valid():
+            edit_mode = True
+            return render(
+                request,
+                'new_post.html',
+                {
+                    'form': form,
+                    'errors': form.errors,
+                    'edit_mode': edit_mode,
+                    'username': username,
+                    'post_id': post_id
+                }
+            )
 
-    post.text = form.cleaned_data['text']
-    post.group = form.cleaned_data['group']
-    post.save()
+        post.text = form.cleaned_data['text']
+        post.group = form.cleaned_data['group']
+        post.save()
     return redirect(f'/{username}/{post_id}/')

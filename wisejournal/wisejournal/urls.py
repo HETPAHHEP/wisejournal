@@ -18,6 +18,12 @@ from django.contrib.flatpages import views
 from django.urls import include, path
 
 urlpatterns = [
+    # админка
+    path('admin/', admin.site.urls),
+
+    # debug
+    path('__debug__/', include('debug_toolbar.urls')),
+
     # главная страница с постами
     path("", include("posts.urls")),
 
@@ -30,12 +36,6 @@ urlpatterns = [
     # если не нашлось нужного шаблона для /auth в файле users.urls --
     # ищем совпадения в файле django.contrib.auth.urls
     path("auth/", include("django.contrib.auth.urls")),
-
-    # админка
-    path('admin/', admin.site.urls),
-
-    # debug
-    path('__debug__/', include('debug_toolbar.urls')),
 ]
 
 # flatpages

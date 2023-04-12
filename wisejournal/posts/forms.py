@@ -11,3 +11,11 @@ class PostForm(forms.ModelForm):
     class Meta:
         model = Post
         fields = ('group', 'text')
+        labels = {
+            'text': 'Текст',
+            'group': 'Сообщество'
+        }
+        help_texts = {
+            'text': 'Брат, это поле для щитпоста',
+            'group': 'Помоги другим бро по секте найти твой щитпост'
+        }
