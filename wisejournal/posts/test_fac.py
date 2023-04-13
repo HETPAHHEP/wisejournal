@@ -1,5 +1,6 @@
 from django.test import TestCase, Client
 
+from .factories import UserFactory, GroupFactory
 from .models import User, Post, Group
 
 
@@ -20,11 +21,7 @@ class TestIndexPage(TestClientMixin, TestCase):
 class TestProfilePage(TestClientMixin, TestCase):
     def setUp(self):
         self.client = Client()
-        self.user = User.objects.create_user(
-            username='new_user_test',
-            email='test@mail.com',
-            password='12345'
-        )
+        self.user = UserFactory()
 
     def tearDown(self):
         User.objects.filter(
@@ -40,11 +37,7 @@ class TestProfilePage(TestClientMixin, TestCase):
 class TestAuthorizedUser(TestClientMixin, TestCase):
     def setUp(self):
         self.client = Client()
-        self.user = User.objects.create_user(
-            username='new_user_test',
-            email='test@mail.com',
-            password='12345'
-        )
+        self.user = UserFactory(password='12345')
         self.client.login(username=self.user.username, password='12345')
 
     def tearDown(self):
@@ -60,11 +53,7 @@ class TestAuthorizedUser(TestClientMixin, TestCase):
         ).delete()
 
     def test_authorized_user_create_post(self):
-        group = Group.objects.create(
-            title='test',
-            slug='test',
-            description='test'
-        )
+        group = GroupFactory()
         group_id = group.id
 
         self.client.post(
@@ -87,11 +76,7 @@ class TestNonAuthorizedUser(TestClientMixin, TestCase):
         ).delete()
 
     def test_create_new_post_non_authorized_user(self):
-        group = Group.objects.create(
-            title='test',
-            slug='test',
-            description='test'
-        )
+        group = GroupFactory()
         group_id = group.id
 
         response = self.client.post(
@@ -113,18 +98,10 @@ class TestNewPost(TestClientMixin, TestCase):
     def setUp(self):
         self.client = Client()
 
-        self.user = User.objects.create_user(
-            username='new_user_test',
-            email='test@mail.com',
-            password='12345'
-        )
+        self.user = UserFactory(password='12345')
         self.client.login(username=self.user.username, password='12345')
 
-        self.group = Group.objects.create(
-            title='test',
-            slug='test',
-            description='test'
-        )
+        self.group = GroupFactory()
         group_id = self.group.id
 
         self.client.post(
@@ -165,18 +142,10 @@ class TestEditPost(TestClientMixin, TestCase):
     def setUp(self):
         self.client = Client()
 
-        self.user = self.user = User.objects.create_user(
-            username='new_user_test',
-            email='test@mail.com',
-            password='12345'
-        )
+        self.user = self.user = UserFactory(password='12345')
         self.client.login(username=self.user.username, password='12345')
 
-        self.group = Group.objects.create(
-            title='test',
-            slug='test',
-            description='test'
-        )
+        self.group = GroupFactory()
 
         self.client.post(
             '/new/',
