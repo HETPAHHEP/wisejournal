@@ -30,13 +30,6 @@ class TestProfilePage(TestClientMixin, TestCase):
         response = self.client.get(f'/{self.user.username}/')
         self.assertEqual(response.status_code, 200)
 
-    # Проверка несуществующей страницы пользователя
-    # (Удалить или переделать без вывода ошибки Not Found)
-    #
-    # def test_get_fake_profile_not_logged(self):
-    #     response = self.client.get(f'/fake_user_slug/')
-    #     self.assertEqual(response.status_code, 404)
-
 
 class TestGroupPage(TestClientMixin, TestCase):
     """Тесты для страницы сообщества"""
@@ -47,13 +40,6 @@ class TestGroupPage(TestClientMixin, TestCase):
     def test_get_real_group_page(self):
         response = self.client.get(f'/group/{self.group.slug}/')
         self.assertEqual(response.status_code, 200)
-
-    # Проверка несуществующей страницы группы
-    # (Удалить или переделать без вывода ошибки Not Found)
-    #
-    # def test_get_fake_group_page(self):
-    #     response = self.client.get(f'/group/not_exist/')
-    #     self.assertEqual(response.status_code, 404)
 
 
 class TestAuthorizedUser(TestClientMixin, TestCase):
