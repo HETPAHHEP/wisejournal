@@ -1,7 +1,6 @@
 from django import forms
-from django.contrib.auth import get_user_model
 
-from .models import Post, Group
+from .models import Post
 
 
 class PostForm(forms.ModelForm):
@@ -10,12 +9,14 @@ class PostForm(forms.ModelForm):
     """
     class Meta:
         model = Post
-        fields = ('group', 'text')
+        fields = ('group', 'text', 'image')
         labels = {
             'text': 'Текст',
-            'group': 'Сообщество'
+            'group': 'Сообщество',
+            'image': 'Изображение'
         }
         help_texts = {
             'text': 'Брат, это поле для щитпоста',
-            'group': 'Помоги другим бро по секте найти твой щитпост'
+            'group': 'Помоги другим бро по секте найти твой щитпост',
+            'image': 'Покажи всем свой кринж'
         }

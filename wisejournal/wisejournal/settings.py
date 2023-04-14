@@ -50,6 +50,9 @@ INSTALLED_APPS = [
     'about',
     'posts',
     'users',
+
+    # THIRD PARTY APPS
+    'sorl.thumbnail'
 ]
 
 # FOR DJANGO DEBUG TOOLBAR
@@ -146,21 +149,27 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
-# STATIC_ROOT = BASE_DIR / 'static'
-STATICFILES_DIRS = [
-    BASE_DIR / 'static',
-]
+STATIC_ROOT = BASE_DIR / 'static'
+# STATICFILES_DIRS = [
+#     BASE_DIR / 'static',
+# ]
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+
 # Login
 
 LOGIN_URL = "/auth/login/"
 LOGIN_REDIRECT_URL = "index"
 # LOGOUT_REDIRECT_URL = "index"
+
 
 # FILE-BASED EMAIL FOR DEBUG
 EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"

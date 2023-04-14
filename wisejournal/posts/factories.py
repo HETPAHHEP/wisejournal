@@ -26,10 +26,12 @@ class GroupFactory(factory.django.DjangoModelFactory):
     description = 'empty'
 
 
-class PostFactory(factory.django.DjangoModelFactory):
+class PostWithoutImageFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Post
 
     text = factory.Sequence(lambda n: f'Test text numb-{n}')
+    # Создается новая группа, если не передать в параметры
     group = factory.SubFactory(GroupFactory)
+    # Создается новый пользователь, если не передать в параметры
     author = factory.SubFactory(UserFactory)

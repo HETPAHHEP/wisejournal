@@ -86,9 +86,11 @@ def new_post(request):
 @login_required
 def post_edit(request, username, post_id):
     """Редактировать нужный пост"""
+    profile_user = get_object_or_404(User, username=username)
     post = get_object_or_404(Post, pk=post_id)
-    if post.author == request.user:
-        form = PostForm(request.POST or None, instance=post)
+
+    if profile_user == request.user:
+        form = PostForm(request.POST or None, files=request.FILES or None, instance=post)
         if not form.is_valid():
             edit_mode = True
             return render(
@@ -106,7 +108,7 @@ def post_edit(request, username, post_id):
         post.text = form.cleaned_data['text']
         post.group = form.cleaned_data['group']
         post.save()
-    return redirect(f'/{username}/{post_id}/')
+    return redirect("post", username=request.user.username, post_id=post_id)
 
 
 def page_not_found(request, exception):
