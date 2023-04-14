@@ -47,10 +47,9 @@ INSTALLED_APPS = [
     "debug_toolbar",
 
     # PROJECT'S APPS
+    'about',
     'posts',
     'users',
-    'django.contrib.sites',
-    'django.contrib.flatpages',
 ]
 
 # FOR DJANGO DEBUG TOOLBAR
@@ -168,5 +167,3 @@ EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
 # Directory for storing messages in debug
 EMAIL_FILE_PATH = BASE_DIR / 'sent_emails'
 
-# ID of the current site
-SITE_ID = 4
