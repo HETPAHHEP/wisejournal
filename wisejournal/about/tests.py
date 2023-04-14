@@ -2,6 +2,7 @@ from django.test import TestCase, Client
 
 
 class TestFlatpages(TestCase):
+    """Тесты проверки работоспособности простых страниц"""
     def setUp(self):
         self.client = Client()
 

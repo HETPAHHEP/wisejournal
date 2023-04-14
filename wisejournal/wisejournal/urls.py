@@ -15,6 +15,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path
+from django.conf.urls import handler404, handler500 # noqa
+
+# собственные страницы ошибок
+handler404 = 'posts.views.page_not_found' # noqa
+handler500 = 'posts.views.server_error'  # noqa
 
 urlpatterns = [
     # админка
@@ -26,7 +31,7 @@ urlpatterns = [
     # главная страница с постами
     path("", include("posts.urls")),
 
-    # flatpages
+    # собственные flatpages
     path('about/', include('about.urls')),
 
     # регистрация и авторизация

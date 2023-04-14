@@ -176,3 +176,11 @@ class TestEditPost(TestClientMixin, TestCase):
     def test_check_edit_post_on_profile_page(self):
         response = self.client.get(f'/{self.user}/')
         self.assertContains(response=response, text='new text!')
+
+
+class TestPageNotFound404(TestClientMixin, TestCase):
+    """Тесты для проверки страницы с ошибкой 404"""
+    def test_try_to_get_fake_page(self):
+        response = self.client.get('/this-page-does-not-exist/')
+        self.assertEqual(response.status_code, 404)
+        self.assertTemplateUsed(response, template_name='misc/404.html')

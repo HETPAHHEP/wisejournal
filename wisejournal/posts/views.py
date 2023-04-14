@@ -107,3 +107,16 @@ def post_edit(request, username, post_id):
         post.group = form.cleaned_data['group']
         post.save()
     return redirect(f'/{username}/{post_id}/')
+
+
+def page_not_found(request, exception):
+    return render(
+        request,
+        'misc/404.html',
+        {'path': request.path},
+        status=404
+    )
+
+
+def server_error(request):
+    return render(request, 'misc/505.html', status=500)
