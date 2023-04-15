@@ -1,4 +1,5 @@
 from django.test import TestCase, Client
+from django.urls import reverse
 
 
 class TestFlatpages(TestCase):
@@ -7,9 +8,13 @@ class TestFlatpages(TestCase):
         self.client = Client()
 
     def test_get_about_author_page(self):
-        response = self.client.get('/about/about-author/')
+        response = self.client.get(
+            reverse('about-author')
+        )
         self.assertEqual(response.status_code, 200)
 
     def test_get_about_spec(self):
-        response = self.client.get('/about/about-spec/')
+        response = self.client.get(
+            reverse('about-spec')
+        )
         self.assertEqual(response.status_code, 200)
