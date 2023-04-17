@@ -1,6 +1,6 @@
 from django import forms
 
-from .models import Post
+from .models import Post, Comment
 
 
 class PostForm(forms.ModelForm):
@@ -20,3 +20,15 @@ class PostForm(forms.ModelForm):
             'group': 'Помоги другим бро по секте найти твой щитпост',
             'image': 'Покажи всем свой кринж'
         }
+
+
+class CommentForm(forms.ModelForm):
+    """
+    Форма для комментария к конкретному посту
+    """
+    text = forms.CharField(widget=forms.Textarea)
+
+    class Meta:
+        model = Comment
+        fields = ['text']
+        help_texts = {'text': 'Написать мудрость'}

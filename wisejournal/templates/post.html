@@ -26,6 +26,7 @@
 
                             <a class="btn btn-sm text-muted"
                                href="/{{ author.get_username }}/{{ post.id }}"
+{#                               href="{% url 'add_comment' username=author.get_username post_id=post.id %}"#}
                                role="button">Добавить комментарий</a>
 
                             {% endif %}
@@ -44,4 +45,5 @@
                 </div>
             </div>
 
+{% include 'comments.html' %}
 {% endblock %}
