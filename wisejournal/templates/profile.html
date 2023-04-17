@@ -60,7 +60,7 @@
                                 {% if user.is_authenticated %}
 
                                 <a class="btn btn-sm text-muted"
-                                    href="/{{ author.get_username }}/{{ post.id }}"
+                                    href="{% url 'add_comment' author.get_username post.id %}"
                                     role="button">Добавить комментарий</a>
 
                                 {% endif %}
