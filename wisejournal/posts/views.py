@@ -137,25 +137,13 @@ def server_error(request):
 
 @login_required
 def add_comment(request, username, post_id):
-    profile_commentator = get_object_or_404(User, username=request.user)
     post = get_object_or_404(Post, pk=post_id)
     form = CommentForm(request.POST or None, instance=None)
 
-    if not form.is_valid():
-        return render(
-            request,
-            'post.html',
-            {
-                'form': form,
-                'post': post,
-                'author': post.author,
-                'errors': form.errors
-            }
-        )
-
-    comment = form.save(commit=False)
-    comment.author = profile_commentator
-    comment.post = post
-    comment.save()
+    if form.is_valid():
+        comment = form.save(commit=False)
+        comment.author = request.user
+        comment.post = post
+        comment.save()
 
     return redirect("post", username=username, post_id=post_id)
