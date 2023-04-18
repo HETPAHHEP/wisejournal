@@ -1,14 +1,16 @@
-from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
+from django.shortcuts import get_object_or_404, redirect, render
+from django.views.decorators.cache import cache_page
 
-from .models import Group, Post, User, Comment
-from .forms import PostForm, CommentForm
+from .forms import CommentForm, PostForm
+from .models import Group, Post, User
 
 
+@cache_page(20, key_prefix='index_page')
 def index(request):
     """Главная страница"""
-    post_list = Post.objects.order_by('-pub_date').all()
+    post_list = Post.objects.all()
     paginator = Paginator(post_list, 10)
 
     page_number = request.GET.get('page')

@@ -176,3 +176,10 @@ EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
 # Directory for storing messages in debug
 EMAIL_FILE_PATH = BASE_DIR / 'sent_emails'
 
+
+# Cache
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+    }
+}

@@ -3,10 +3,12 @@ import shutil
 import tempfile
 
 from django.conf import settings
-from django.test import TestCase, Client
+from django.core.cache import cache
+from django.test import Client, TestCase
 from django.urls import reverse
 
-from .factories import UserFactory, GroupFactory, PostWithoutImageFactory, user_password
+from .factories import (GroupFactory, PostWithoutImageFactory, UserFactory,
+                        user_password)
 from .models import Post
 
 
@@ -17,17 +19,24 @@ class TestClientMixin:
         self.client = Client()
 
     def tearDown(self):
-        pass
+        cache.clear()
 
 
 class TestIndexPage(TestClientMixin, TestCase):
     """Тесты для главной страницы"""
 
     def test_index_available(self):
-        response = self.client.get(
-            reverse('index')
-        )
+        response = self.client.get(reverse('index'))
         self.assertEqual(response.status_code, 200)
+
+    def test_check_caching(self):
+        PostWithoutImageFactory()
+
+        with self.assertNumQueries(5):
+            response = self.client.get(reverse('index'))
+            self.assertEqual(response.status_code, 200)
+            response = self.client.get(reverse('index'))
+            self.assertEqual(response.status_code, 200)
 
 
 class TestProfilePage(TestClientMixin, TestCase):
@@ -204,9 +213,7 @@ class TestEditPost(TestClientMixin, TestCase):
         self.assertTrue(Post.objects.filter(text='test edit post 124!', group=self.group.id).exists())
 
     def test_check_edit_post_on_index_page(self):
-        response = self.client.get(
-            reverse('index')
-        )
+        response = self.client.get(reverse('index'))
         self.assertContains(response=response, text='new text!')
 
     def test_check_edit_post_on_post_page(self):

@@ -1,8 +1,7 @@
 import factory
-
-from .models import User, Group, Post
-
 from django.contrib.auth.hashers import make_password
+
+from .models import Group, Post, User
 
 user_password = 'password12345test'
 
