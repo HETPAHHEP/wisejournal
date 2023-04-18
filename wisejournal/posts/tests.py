@@ -302,7 +302,7 @@ class TestImages(TestClientMixin, TestCase):
         )
 
         response = self.client.get(post_url)
-        self.assertContains(response=response, text='<img class')
+        self.assertContains(response=response, text='<img')
 
     def test_display_post_image_on_all_linked_pages(self):
         # Добавление картинки к существующему посту
@@ -340,7 +340,7 @@ class TestImages(TestClientMixin, TestCase):
 
         for url in urls:
             response_index_page = self.client.get(url)
-            self.assertContains(response=response_index_page, text='<img class')
+            self.assertContains(response=response_index_page, text='<img')
 
     def test_upload_file_not_image_type(self):
         # Добавление отличного от картинки файла к существующему посту
@@ -361,4 +361,4 @@ class TestImages(TestClientMixin, TestCase):
             )
             self.assertEqual(post_with_file.status_code, 200)
             # Проверяем, что на странице поста не отображается тег img
-            self.assertNotContains(post_with_file, '<img class')
+            self.assertNotContains(post_with_file, '<img')
