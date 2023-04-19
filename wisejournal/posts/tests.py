@@ -39,6 +39,32 @@ class TestIndexPage(TestClientMixin, TestCase):
             self.assertEqual(response.status_code, 200)
 
 
+class TestFollowingPage(TestClientMixin, TestCase):
+    """Тесты для проверки страницы подписки"""
+
+    def setUp(self):
+        self.client = Client()
+
+        self.user = UserFactory()
+        login = self.client.login(username=self.user.username, password=user_password)
+        self.assertTrue(login)
+
+        self.author = UserFactory()
+        self.post = PostWithoutImageFactory(author=self.author)
+
+    def test_check_post_on_following_page_for_follower(self):
+        self.client.get(reverse('profile_follow', kwargs={'username': self.author}))
+        check_following = self.user.follower.filter(author=self.author).exists()
+        self.assertTrue(check_following)
+
+        with self.assertNumQueries(7):
+            self.client.get(reverse('follow_index'))
+
+    def test_check_post_on_following_page_for_non_follower(self):
+        with self.assertNumQueries(3):
+            self.client.get(reverse('follow_index'))
+
+
 class TestProfilePage(TestClientMixin, TestCase):
     """Тесты для страницы профиля пользователя"""
 
@@ -91,9 +117,40 @@ class TestAuthorizedUser(TestClientMixin, TestCase):
         )
         self.assertTrue(Post.objects.filter(text='test text', group=f'{group_id}'))
 
+    def test_comment_functions_for_authorized_user(self):
+        post = PostWithoutImageFactory()
+
+        self.client.post(
+            reverse('add_comment', kwargs={'username': post.author, 'post_id': 1}),
+            data={'text': 'test comment!'}
+        )
+        self.assertTrue(post.comments.filter(text='test comment!').exists())
+
+    def test_follow_functions(self):
+        following_author = UserFactory()
+
+        # Проверка возможности подписаться
+        self.client.get(reverse('profile_follow', kwargs={'username': following_author}))
+        check_following = self.user.follower.filter(author=following_author).exists()
+        self.assertTrue(check_following)
+
+        # Проверка возможности отписаться
+        self.client.get(reverse('profile_unfollow', kwargs={'username': following_author}))
+        check_following = self.user.follower.filter(author=following_author).exists()
+        self.assertFalse(check_following)
+
 
 class TestNonAuthorizedUser(TestClientMixin, TestCase):
     """Тесты для проверки возможности не авторизированного пользователя"""
+
+    def test_comment_functions_for_non_authorized_user(self):
+        post = PostWithoutImageFactory()
+
+        self.client.post(
+            reverse('add_comment', kwargs={'username': post.author, 'post_id': 1}),
+            data={'text': 'test comment!'}
+        )
+        self.assertFalse(post.comments.filter(text='test comment!').exists())
 
     def test_create_new_post_non_authorized_user(self):
         """

@@ -4,7 +4,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.cache import cache_page
 
 from .forms import CommentForm, PostForm
-from .models import Group, Post, User
+from .models import Follow, Group, Post, User
 
 
 @cache_page(20, key_prefix='index_page')
@@ -43,14 +43,18 @@ def profile(request, username):
     """Страница профиля со всеми постами"""
     author = get_object_or_404(User, username=username)
     post_list = Post.objects.filter(author=author).all()
-    paginator = Paginator(post_list, 10)
 
+    following = False
+    if request.user.is_authenticated:
+        following = request.user.follower.filter(author=author).exists()
+
+    paginator = Paginator(post_list, 10)
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)
     return render(
         request,
         'profile.html',
-        {'page': page, 'paginator': paginator, 'author': author, 'user': request.user}
+        {'page': page, 'paginator': paginator, 'author': author, 'user': request.user, 'following': following}
     )
 
 
@@ -125,6 +129,7 @@ def post_edit(request, username, post_id):
 
 
 def page_not_found(request, exception):
+    """Вывод страницы с ошибкой 404"""
     return render(
         request,
         'misc/404.html',
@@ -134,11 +139,13 @@ def page_not_found(request, exception):
 
 
 def server_error(request):
+    """Вывод страницы с ошибкой 500"""
     return render(request, 'misc/505.html', status=500)
 
 
 @login_required
 def add_comment(request, username, post_id):
+    """Обработка формы отправки комментария"""
     post = get_object_or_404(Post, pk=post_id)
     form = CommentForm(request.POST or None, instance=None)
 
@@ -149,3 +156,43 @@ def add_comment(request, username, post_id):
         comment.save()
 
     return redirect("post", username=username, post_id=post_id)
+
+
+@login_required
+def follow_index(request):
+    post_list = Post.objects.filter(author__following__user=request.user)
+
+    paginator = Paginator(post_list, 10)
+
+    page_number = request.GET.get('page')
+    page = paginator.get_page(page_number)
+
+    return render(
+        request,
+        'follow.html',
+        {'page': page, 'paginator': paginator}
+    )
+
+
+@login_required
+def profile_follow(request, username):
+    follow_author = get_object_or_404(User, username=username)
+
+    if follow_author != request.user and (
+        not request.user.follower.filter(author=follow_author)
+    ):
+        Follow.objects.create(user=request.user, author=follow_author)
+
+    return redirect('profile', username=username)
+
+
+@login_required
+def profile_unfollow(request, username):
+    follow_author = get_object_or_404(User, username=username)
+
+    date_follow = request.user.follower.filter(author=follow_author)
+
+    if date_follow:
+        date_follow.delete()
+
+    return redirect('profile', username=username)

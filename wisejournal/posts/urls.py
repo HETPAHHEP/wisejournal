@@ -9,6 +9,12 @@ urlpatterns = [
     path('group/<slug:slug>/', views.group_posts, name='group'),
     # Add new post
     path('new/', views.new_post, name='new_post'),
+    # Following page
+    path('follow/', views.follow_index, name='follow_index'),
+    # Follow user
+    path('<str:username>/follow', views.profile_follow, name='profile_follow'),
+    # Unfollow user
+    path('<str:username>/unfollow', views.profile_unfollow, name='profile_unfollow'),
     # Profile page
     path('<str:username>/', views.profile, name='profile'),
     # Post view page
