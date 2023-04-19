@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'about',
     'posts',
     'users',
+    'core',
 
     # THIRD PARTY APPS
     'sorl.thumbnail'
@@ -77,7 +78,7 @@ ROOT_URLCONF = 'wisejournal.urls'
 
 TEMPLATES_DIR = BASE_DIR / 'templates'
 # For redefinition of standard templates django.contrib.admin
-REG_TEMPLATES_DIR = BASE_DIR / 'users' / 'templates'
+REG_TEMPLATES_DIR = BASE_DIR / 'templates' / 'users'
 
 TEMPLATES = [
     {
@@ -92,7 +93,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
 
                 # CUSTOM CONTEXT PROCESSORS
-                'posts.context_processors.year',
+                'core.context_processors.context_processors.year',
             ],
         },
     },

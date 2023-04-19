@@ -1,0 +1,10 @@
+{% extends 'posts/profile.html' %}
+{% block posts_count %}
+    Записей: {{ post_count }}
+{% endblock %}
+
+<!-- Вывод поста -->
+{% block post_view %}
+    {% include "posts/includes/post_item.html" with post=post %}
+    {% include 'posts/includes/comments.html' %}
+{% endblock %}

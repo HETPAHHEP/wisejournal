@@ -10,6 +10,8 @@ from .models import Follow, Group, Post, User
 @cache_page(20, key_prefix='index_page')
 def index(request):
     """Главная страница"""
+    template = 'posts/index.html'
+
     post_list = Post.objects.all()
     paginator = Paginator(post_list, 10)
 
@@ -18,13 +20,15 @@ def index(request):
 
     return render(
         request,
-        'index.html',
+        template,
         {'page': page, 'paginator': paginator}
     )
 
 
 def group_posts(request, slug):
     """Страница сообщества"""
+    template = 'posts/group.html'
+
     group = get_object_or_404(Group, slug=slug)
     posts_list = Post.objects.filter(group=group).all()
     paginator = Paginator(posts_list, 10)
@@ -34,13 +38,15 @@ def group_posts(request, slug):
 
     return render(
         request,
-        'group.html',
+        template,
         {'page': page, 'paginator': paginator, 'group': group}
     )
 
 
 def profile(request, username):
     """Страница профиля со всеми постами"""
+    template = 'posts/profile.html'
+
     author = get_object_or_404(User, username=username)
     post_list = Post.objects.filter(author=author).all()
 
@@ -51,15 +57,18 @@ def profile(request, username):
     paginator = Paginator(post_list, 10)
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)
+
     return render(
         request,
-        'profile.html',
+        template,
         {'page': page, 'paginator': paginator, 'author': author, 'user': request.user, 'following': following}
     )
 
 
 def post_view(request, username, post_id):
     """Страница конкретного поста"""
+    template = 'posts/post.html'
+
     author = get_object_or_404(User, username=username)
     post = get_object_or_404(Post, pk=post_id, author=author)
     comments = post.comments.all()
@@ -68,7 +77,7 @@ def post_view(request, username, post_id):
 
     return render(
         request,
-        'post.html',
+        template,
         {
             'post': post,
             'author': author,
@@ -83,11 +92,13 @@ def post_view(request, username, post_id):
 @login_required
 def new_post(request):
     """Добавить новый пост"""
+    template = 'posts/new_post.html'
+
     form = PostForm(request.POST or None)
     if not form.is_valid():
         return render(
             request,
-            'new_post.html',
+            template,
             {
                 'form': form,
                 'errors': form.errors
@@ -103,6 +114,8 @@ def new_post(request):
 @login_required
 def post_edit(request, username, post_id):
     """Редактировать нужный пост"""
+    template = 'posts/new_post.html'
+
     profile_user = get_object_or_404(User, username=username)
     post = get_object_or_404(Post, pk=post_id)
 
@@ -112,7 +125,7 @@ def post_edit(request, username, post_id):
             edit_mode = True
             return render(
                 request,
-                'new_post.html',
+                template,
                 {
                     'form': form,
                     'errors': form.errors,
@@ -130,9 +143,11 @@ def post_edit(request, username, post_id):
 
 def page_not_found(request, exception):
     """Вывод страницы с ошибкой 404"""
+    template = 'misc/404.html'
+
     return render(
         request,
-        'misc/404.html',
+        template,
         {'path': request.path},
         status=404
     )
@@ -140,7 +155,8 @@ def page_not_found(request, exception):
 
 def server_error(request):
     """Вывод страницы с ошибкой 500"""
-    return render(request, 'misc/505.html', status=500)
+    template = 'misc/500.html'
+    return render(request, template, status=500)
 
 
 @login_required
@@ -160,6 +176,8 @@ def add_comment(request, username, post_id):
 
 @login_required
 def follow_index(request):
+    template = 'posts/follow.html'
+
     post_list = Post.objects.filter(author__following__user=request.user)
 
     paginator = Paginator(post_list, 10)
@@ -169,7 +187,7 @@ def follow_index(request):
 
     return render(
         request,
-        'follow.html',
+        template,
         {'page': page, 'paginator': paginator}
     )
 

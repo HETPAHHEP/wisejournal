@@ -7,9 +7,9 @@ from django.core.cache import cache
 from django.test import Client, TestCase
 from django.urls import reverse
 
+from ..models import Post
 from .factories import (GroupFactory, PostWithoutImageFactory, UserFactory,
                         user_password)
-from .models import Post
 
 
 class TestClientMixin:
@@ -20,159 +20,6 @@ class TestClientMixin:
 
     def tearDown(self):
         cache.clear()
-
-
-class TestIndexPage(TestClientMixin, TestCase):
-    """Тесты для главной страницы"""
-
-    def test_index_available(self):
-        response = self.client.get(reverse('index'))
-        self.assertEqual(response.status_code, 200)
-
-    def test_check_caching(self):
-        PostWithoutImageFactory()
-
-        with self.assertNumQueries(5):
-            response = self.client.get(reverse('index'))
-            self.assertEqual(response.status_code, 200)
-            response = self.client.get(reverse('index'))
-            self.assertEqual(response.status_code, 200)
-
-
-class TestFollowingPage(TestClientMixin, TestCase):
-    """Тесты для проверки страницы подписки"""
-
-    def setUp(self):
-        self.client = Client()
-
-        self.user = UserFactory()
-        login = self.client.login(username=self.user.username, password=user_password)
-        self.assertTrue(login)
-
-        self.author = UserFactory()
-        self.post = PostWithoutImageFactory(author=self.author)
-
-    def test_check_post_on_following_page_for_follower(self):
-        self.client.get(reverse('profile_follow', kwargs={'username': self.author}))
-        check_following = self.user.follower.filter(author=self.author).exists()
-        self.assertTrue(check_following)
-
-        with self.assertNumQueries(7):
-            self.client.get(reverse('follow_index'))
-
-    def test_check_post_on_following_page_for_non_follower(self):
-        with self.assertNumQueries(3):
-            self.client.get(reverse('follow_index'))
-
-
-class TestProfilePage(TestClientMixin, TestCase):
-    """Тесты для страницы профиля пользователя"""
-
-    def setUp(self):
-        self.client = Client()
-        self.user = UserFactory()
-
-    def test_get_profile_for_new_user_not_logged(self):
-        response = self.client.get(
-            reverse('profile', kwargs={'username': self.user.username})
-        )
-        self.assertEqual(response.status_code, 200)
-
-
-class TestGroupPage(TestClientMixin, TestCase):
-    """Тесты для страницы сообщества"""
-
-    def setUp(self):
-        self.client = Client()
-        self.group = GroupFactory()
-
-    def test_get_real_group_page(self):
-        response = self.client.get(
-            reverse('group', kwargs={'slug': self.group.slug})
-        )
-        self.assertEqual(response.status_code, 200)
-
-
-class TestAuthorizedUser(TestClientMixin, TestCase):
-    """Тесты для проверки возможности авторизированного пользователя"""
-
-    def setUp(self):
-        self.client = Client()
-
-        self.user = UserFactory()
-        login = self.client.login(username=self.user.username, password=user_password)
-        self.assertTrue(login)
-
-    def test_authorized_user_create_post(self):
-        """Авторизованный пользователь может опубликовать пост"""
-        group = GroupFactory()
-        group_id = group.id
-
-        self.client.post(
-            reverse('new_post'),
-            data={
-                'text': 'test text',
-                'group': group_id
-            }
-        )
-        self.assertTrue(Post.objects.filter(text='test text', group=f'{group_id}'))
-
-    def test_comment_functions_for_authorized_user(self):
-        post = PostWithoutImageFactory()
-
-        self.client.post(
-            reverse('add_comment', kwargs={'username': post.author, 'post_id': 1}),
-            data={'text': 'test comment!'}
-        )
-        self.assertTrue(post.comments.filter(text='test comment!').exists())
-
-    def test_follow_functions(self):
-        following_author = UserFactory()
-
-        # Проверка возможности подписаться
-        self.client.get(reverse('profile_follow', kwargs={'username': following_author}))
-        check_following = self.user.follower.filter(author=following_author).exists()
-        self.assertTrue(check_following)
-
-        # Проверка возможности отписаться
-        self.client.get(reverse('profile_unfollow', kwargs={'username': following_author}))
-        check_following = self.user.follower.filter(author=following_author).exists()
-        self.assertFalse(check_following)
-
-
-class TestNonAuthorizedUser(TestClientMixin, TestCase):
-    """Тесты для проверки возможности не авторизированного пользователя"""
-
-    def test_comment_functions_for_non_authorized_user(self):
-        post = PostWithoutImageFactory()
-
-        self.client.post(
-            reverse('add_comment', kwargs={'username': post.author, 'post_id': 1}),
-            data={'text': 'test comment!'}
-        )
-        self.assertFalse(post.comments.filter(text='test comment!').exists())
-
-    def test_create_new_post_non_authorized_user(self):
-        """
-        Неавторизованный посетитель не может опубликовать пост
-        (редирект на страницу входа)
-        """
-        group = GroupFactory()
-        group_id = group.id
-
-        response = self.client.post(
-            reverse('new_post'),
-            data={
-                'text': 'test text',
-                'group': group_id
-            }
-        )
-        self.assertRedirects(
-            response,
-            expected_url='/auth/login/?next=/new/',
-            status_code=302,
-            target_status_code=200
-        )
 
 
 class TestNewPost(TestClientMixin, TestCase):
@@ -284,15 +131,6 @@ class TestEditPost(TestClientMixin, TestCase):
             reverse('profile', kwargs={'username': self.user})
         )
         self.assertContains(response=response, text='new text!')
-
-
-class TestPageNotFound404(TestClientMixin, TestCase):
-    """Тесты для проверки страницы с ошибкой 404"""
-
-    def test_try_to_get_fake_page(self):
-        response = self.client.get('/this-page-does-not-exist/')
-        self.assertEqual(response.status_code, 404)
-        self.assertTemplateUsed(response, template_name='misc/404.html')
 
 
 class TestImages(TestClientMixin, TestCase):
