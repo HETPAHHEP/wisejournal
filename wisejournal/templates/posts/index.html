@@ -2,20 +2,20 @@
 {% block title %} Последние обновления {% endblock %}
 {% block content %}
 
-    <div class="container py-4">
-        <!-- Переключение ленты между "Все авторы" и "Избранные авторы" -->
-        {% include "posts/includes/menu.html" with index=True %}
+    <!-- Переключение ленты между "Все авторы" и "Избранные авторы" -->
+    {% include "posts/includes/menu.html" with index=True %}
 
-        <h1>Последние обновления на сайте</h1>
+    <div class="container">
         <!-- Вывод ленты записей -->
             {% for post in page %}
                 {% include "posts/includes/post_item.html" with post=post %}
             {% endfor %}
-    </div>
 
     <!-- Вывод паджинатора -->
     {% if page.has_other_pages %}
         {% include 'posts/includes/paginator.html' with items=page paginator=paginator %}
     {% endif %}
+
+    </div>
 
 {% endblock %}

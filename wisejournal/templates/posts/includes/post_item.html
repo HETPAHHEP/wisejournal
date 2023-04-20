@@ -1,4 +1,4 @@
-<div class="card mb-3 mt-1 shadow-sm">
+<div class="card mb-3 mt-1 shadow-sm" style="width: 960px; margin: 0 auto">
 
     <!-- Отображение картинки -->
     {% load thumbnail %}
@@ -9,8 +9,8 @@
     <div class="card-body">
         <p class="card-text">
             <!-- Ссылка на автора через @ -->
-            <a id="post_{{ post.id }}" href="{% url 'profile' post.author.username %}">
-                <strong class="d-block text-gray-dark">@{{ post.author }}</strong>
+            <a class="link-dark link-offset-1 link-underline-opacity-0 link-underline-opacity-100-hover" id="post_{{ post.id }}" href="{% url 'profile' post.author.username %}">
+                <strong class="d-block text-dark">@{{ post.author }}</strong>
             </a>
             {{ post.text|linebreaksbr }}
         </p>

@@ -1,14 +1,16 @@
 <nav class="navbar navbar-light" style="background-color: #D9F0FF;">
-    <a class="navbar-brand" href="{% url 'index' %}"><span style="font-weight: bold; font-size: x-large; pla">WiseJournal</span></a>
-    <nav class="my-2 my-md-0 mr-md-3">
-        {% if user.is_authenticated %}
-        <a class="p-2 text-dark" href="{% url 'new_post' %}">Новая запись</a>
-        Пользователь: {{ user.username }}.
-        <a class="p-2 text-dark" href="{% url 'password_change' %}">Изменить пароль</a>
-        <a class="p-2 text-dark" href="{% url 'logout' %}">Выйти</a>
-        {% else %}
-        <a class="p-2 text-dark" href="{% url 'login' %}">Войти</a> |
-        <a class="p-2 text-dark" href="{% url 'signup' %}">Регистрация</a>
-        {% endif %}
-    </nav>
+    <div class="container-fluid">
+        <a class="navbar-brand mb-0 fs-4 fw-bold" href="{% url 'index' %}"><span>WiseJournal</span></a>
+        <nav class="my-2 my-md-0 mr-md-3">
+            {% if user.is_authenticated %}
+                <a class="btn btn-light" href="{% url 'new_post' %}">🞤 Создать</a>
+                    Пользователь: {{ user.username }}.
+                <a class="p-2 text-dark" href="{% url 'password_change' %}">Изменить пароль</a>
+                <a class="p-2 text-dark" href="{% url 'logout' %}">Выйти</a>
+            {% else %}
+                <a class="p-2 text-dark" href="{% url 'login' %}">Войти</a> |
+                <a class="p-2 text-dark" href="{% url 'signup' %}">Регистрация</a>
+            {% endif %}
+        </nav>
+    </div>
 </nav>

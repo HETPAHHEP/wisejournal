@@ -60,11 +60,13 @@
 
         </div>
     </div>
-</div>
 
 <!-- Вывод паджинатора -->
 {% if page.has_other_pages %}
     {% include 'posts/includes/paginator.html' with items=page paginator=paginator %}
 {% endif %}
+
 {% endblock %}
+</div>
+
 {% endblock %}

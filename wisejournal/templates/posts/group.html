@@ -5,7 +5,7 @@
 {% endblock %}
 {% block content %}
 
-    <div class="container py-4" >
+    <div class="container py-4">
         <!-- Отображение названия группы -->
         <h3>{{ group.description }}
             <a class="card-link muted" href="{% url 'group' group.slug %}">
@@ -18,11 +18,12 @@
             {% include "posts/includes/post_item.html" with post=post %}
         {% endfor %}
 
-    </div>
 
     <!-- Вывод паджинатора -->
     {% if page.has_other_pages %}
         {% include 'posts/includes/paginator.html' with items=page paginator=paginator %}
     {% endif %}
+
+    </div>
 
 {% endblock %}
