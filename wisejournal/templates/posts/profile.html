@@ -33,14 +33,15 @@
                     {% if user != author %}
                     <li class="list-group-item">
                         {% if following %}
-                        <a class="btn btn-lg btn-light"
-                            href="{% url 'profile_unfollow' author.username %}" role="button">
-                            Отписаться
+                        <a class="btn btn-lg" href="{% url 'profile_unfollow' author.username %}" role="button" style="
+                            --bs-btn-color: black; --bs-btn-bg: #eaeaea; --bs-btn-hover-color: #ff1e1e;
+                            --bs-btn-hover-bg: #ffffff; --bs-btn-hover-border-color: #ff1e1e;">
+                            Читаете
                         </a>
                         {% else %}
                         <a class="btn btn-lg btn-primary"
                             href="{% url 'profile_follow' author.username %}" role="button">
-                            Подписаться
+                            Читать
                         </a>
                         {% endif %}
                     </li>
