@@ -31,7 +31,7 @@
                     </li>
                     <!-- Кнопка подписки или подписки для автора -->
                     {% if user != author %}
-                    <li class="list-group-item">
+                    <li class="list-group-item d-grid gap-2">
                         {% if following %}
                         <a class="btn btn-lg" href="{% url 'profile_unfollow' author.username %}" role="button" style="
                             --bs-btn-color: black; --bs-btn-bg: #eaeaea; --bs-btn-hover-color: #ff1e1e;
