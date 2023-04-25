@@ -1,6 +1,6 @@
 {% extends 'posts/profile.html' %}
 {% block posts_count %}
-    Записей: {{ post_count }}
+    Записей: {{ author.posts.count }}
 {% endblock %}
 
 <!-- Вывод поста -->

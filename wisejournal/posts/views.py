@@ -72,7 +72,6 @@ def post_view(request, username, post_id):
     author = get_object_or_404(User, username=username)
     post = get_object_or_404(Post, pk=post_id, author=author)
     comments = post.comments.all()
-    post_count = Post.objects.filter(author=author).count()
     form = CommentForm()
 
     return render(
@@ -82,7 +81,6 @@ def post_view(request, username, post_id):
             'post': post,
             'author': author,
             'user': request.user,
-            'post_count': post_count,
             'items': comments,
             'form': form
         }
