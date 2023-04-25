@@ -174,6 +174,7 @@ def add_comment(request, username, post_id):
 
 @login_required
 def follow_index(request):
+    """Страница с постами авторов, на которые подписан пользователь"""
     template = 'posts/follow.html'
 
     post_list = Post.objects.filter(author__following__user=request.user)
@@ -192,6 +193,7 @@ def follow_index(request):
 
 @login_required
 def profile_follow(request, username):
+    """Подписаться на пользователя"""
     follow_author = get_object_or_404(User, username=username)
 
     if follow_author != request.user and (
@@ -204,6 +206,7 @@ def profile_follow(request, username):
 
 @login_required
 def profile_unfollow(request, username):
+    """Отписаться от пользователя"""
     follow_author = get_object_or_404(User, username=username)
 
     date_follow = request.user.follower.filter(author=follow_author)
