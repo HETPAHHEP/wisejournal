@@ -1,15 +1,19 @@
 <nav class="navbar navbar-light" style="background-color: #D9F0FF;">
     <div class="container-fluid">
         <a class="navbar-brand mb-0 fs-4 fw-bold" href="{% url 'index' %}"><span>WiseJournal</span></a>
-        <nav class="my-2 my-md-0 mr-md-3">
+        <nav class="d-grid gap-2 d-md-flex justify-content-md-end">
             {% if user.is_authenticated %}
                 <a class="btn btn-light" href="{% url 'new_post' %}">🞤 Создать</a>
-                    Пользователь: {{ user.username }}.
-                <a class="p-2 text-dark" href="{% url 'password_change' %}">Изменить пароль</a>
-                <a class="p-2 text-dark" href="{% url 'logout' %}">Выйти</a>
+                <a class="btn btn-light" href="{% url 'profile' user.username %}">👤 Профиль</a>
+                <div class="btn-group" role="group">
+                    <a class="btn btn-outline-dark" href="{% url 'password_change' %}">Изменить пароль</a>
+                    <a class="btn btn-outline-dark" href="{% url 'logout' %}">Выйти</a>
+                </div>
             {% else %}
-                <a class="p-2 text-dark" href="{% url 'login' %}">Войти</a> |
-                <a class="p-2 text-dark" href="{% url 'signup' %}">Регистрация</a>
+                <div class="btn-group" role="group">
+                    <a class="btn btn-outline-dark" href="{% url 'login' %}">Войти</a>
+                    <a class="btn btn-outline-dark" href="{% url 'signup' %}">Регистрация</a>
+                </div>
             {% endif %}
         </nav>
     </div>
